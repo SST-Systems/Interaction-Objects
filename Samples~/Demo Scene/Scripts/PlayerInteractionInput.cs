@@ -1,4 +1,7 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace SST.InteractionObjects.Samples
 {
@@ -13,7 +16,15 @@ namespace SST.InteractionObjects.Samples
     /// <see cref="InteractionObjectTaker"/> on that camera, so the interaction ray
     /// follows the view. A <see cref="CharacterController"/> is used for movement if
     /// one is present; otherwise the body is moved directly.
-    /// Uses the legacy Input Manager (<see cref="Input"/>).
+    /// <para>
+    /// Works with either input backend: the legacy Input Manager
+    /// (<see cref="Input"/>) or the new Input System package. The path is selected at
+    /// compile time via <c>ENABLE_INPUT_SYSTEM</c>, so the sample runs regardless of
+    /// the project's <em>Active Input Handling</em> setting (Old, New or Both) without
+    /// adding a hard package dependency. When the new Input System is active, the
+    /// interact/throw bindings below are fixed to E and left mouse button; the
+    /// serialized KeyCode fields apply to the legacy backend only.
+    /// </para>
     /// </remarks>
     public class PlayerInteractionInput : MonoBehaviour
     {
@@ -32,9 +43,15 @@ namespace SST.InteractionObjects.Samples
         [SerializeField, Range(0.5f, 10f)] private float _lookSensitivity = 2f;
         [SerializeField, Range(30f, 89f)] private float _maxPitch = 85f;
 
-        [Header("Input")]
+#if !ENABLE_INPUT_SYSTEM
+        [Header("Input (legacy)")]
         [SerializeField] private KeyCode _interactKey = KeyCode.E;
         [SerializeField] private KeyCode _throwKey = KeyCode.Mouse0;
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+        private const float NewInputLookScale = 0.05f;
+#endif
 
         private CharacterController _controller;
         private float _pitch;
@@ -70,7 +87,7 @@ namespace SST.InteractionObjects.Samples
             Move();
             Interact();
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (WasEscapePressed())
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -79,8 +96,9 @@ namespace SST.InteractionObjects.Samples
 
         private void Look()
         {
-            var mouseX = Input.GetAxis("Mouse X") * _lookSensitivity;
-            var mouseY = Input.GetAxis("Mouse Y") * _lookSensitivity;
+            var lookDelta = ReadLook();
+            var mouseX = lookDelta.x * _lookSensitivity;
+            var mouseY = lookDelta.y * _lookSensitivity;
 
             transform.Rotate(Vector3.up, mouseX, Space.Self);
 
@@ -93,7 +111,8 @@ namespace SST.InteractionObjects.Samples
 
         private void Move()
         {
-            var input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+            var move = ReadMove();
+            var input = new Vector3(move.x, 0f, move.y);
             var direction = transform.TransformDirection(Vector3.ClampMagnitude(input, 1f));
 
             if (_controller != null)
@@ -114,11 +133,66 @@ namespace SST.InteractionObjects.Samples
             if (_taker == null)
                 return;
 
-            if (Input.GetKeyDown(_interactKey))
+            if (WasInteractPressed())
                 _taker.Interaction();
 
-            if (Input.GetKeyDown(_throwKey))
+            if (WasThrowPressed())
                 _taker.ThrowObject();
+        }
+
+        private Vector2 ReadLook()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var mouse = Mouse.current;
+            return mouse != null ? mouse.delta.ReadValue() * NewInputLookScale : Vector2.zero;
+#else
+            return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+#endif
+        }
+
+        private Vector2 ReadMove()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var keyboard = Keyboard.current;
+            if (keyboard == null)
+                return Vector2.zero;
+
+            var x = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f);
+            var y = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f);
+            return new Vector2(x, y);
+#else
+            return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+#endif
+        }
+
+        private bool WasInteractPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var keyboard = Keyboard.current;
+            return keyboard != null && keyboard.eKey.wasPressedThisFrame;
+#else
+            return Input.GetKeyDown(_interactKey);
+#endif
+        }
+
+        private bool WasThrowPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var mouse = Mouse.current;
+            return mouse != null && mouse.leftButton.wasPressedThisFrame;
+#else
+            return Input.GetKeyDown(_throwKey);
+#endif
+        }
+
+        private bool WasEscapePressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var keyboard = Keyboard.current;
+            return keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
+#else
+            return Input.GetKeyDown(KeyCode.Escape);
+#endif
         }
     }
 }
