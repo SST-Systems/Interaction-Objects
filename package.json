@@ -1,0 +1,32 @@
+{
+  "name": "com.sst-systems.interaction-objects",
+  "version": "1.0.0",
+  "displayName": "Interaction Objects",
+  "description": "A drop-in first-person interaction system for Unity: look at a physics object to highlight it, then pick it up, carry it on a mass-aware hand joint, drop it or throw it. A held object is released automatically if it slips behind a wall. Ships with an original inverted-hull outline effect (Built-in RP and URP) and a demo scene.",
+  "unity": "2021.3",
+  "author": {
+    "name": "SST Systems",
+    "email": "egor.schesterikov@mail.ru",
+    "url": "https://github.com/SST-Systems"
+  },
+  "keywords": [
+    "interaction",
+    "physics",
+    "pick-up",
+    "grab",
+    "outline",
+    "first-person",
+    "gamedev"
+  ],
+  "documentationUrl": "https://github.com/SST-Systems/Interaction-Objects/blob/main/README.md",
+  "changelogUrl": "https://github.com/SST-Systems/Interaction-Objects/releases",
+  "licensesUrl": "https://github.com/SST-Systems/Interaction-Objects/blob/main/LICENSE.md",
+  "samples": [
+    {
+      "displayName": "Demo Scene",
+      "description": "A ready-made scene demonstrating hover highlight, pick-up, hold and throw.",
+      "path": "Samples~/Demo Scene"
+    }
+  ],
+  "dependencies": {}
+}
