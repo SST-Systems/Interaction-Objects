@@ -1,6 +1,15 @@
 # Changelog
 
-## [1.0.0] - 2026-07-18
+## 1.0.1 - 19.07.2026
+
+### Changed
+- Demo `PlayerInteractionInput` now supports both input backends via
+  `ENABLE_INPUT_SYSTEM` conditional compilation. The sample runs under any
+  *Active Input Handling* setting (Old, New or Both) with no added package
+  dependency, fixing the "nothing works" case on projects that use the new
+  Input System exclusively.
+
+## 1.0.0 - 18.07.2026
 
 ### Added
 - `InteractionObjectTaker` — ray-based selection, pick-up, hold and throw driven by

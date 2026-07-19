@@ -170,6 +170,8 @@ All runtime types live in the `SST.InteractionObjects` namespace.
 
 The `Samples` folder contains a `Demo Scene` and a `PlayerInteractionInput` controller — a primitive first-person setup (WASD movement, mouse look, pick-up and throw) that shows the pieces wired together.
 
+The demo controller supports **both input backends**. It compiles against the legacy Input Manager or the new Input System depending on `ENABLE_INPUT_SYSTEM`, so it runs whatever the project's *Active Input Handling* (Player Settings) is set to — Old, New or Both — without adding a package dependency. Under the new Input System the interact/throw keys are fixed to **E** and **left mouse button**; the serialized KeyCode fields apply to the legacy backend only.
+
 ---
 
 ## License
