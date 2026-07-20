@@ -1,0 +1,17 @@
+{
+    "name": "SST.InteractionObjects.Samples.DemoScene",
+    "rootNamespace": "SST.InteractionObjects.Samples.DemoScene",
+    "references": [
+        "GUID:3b0ead055869419ea2a2ad576406b94d",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
