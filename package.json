@@ -1,6 +1,6 @@
 {
   "name": "com.sst-systems.interaction-objects",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Interaction Objects",
   "description": "A drop-in first-person interaction system for Unity: look at a physics object to highlight it, then pick it up, carry it on a mass-aware hand joint, drop it or throw it. A held object is released automatically if it slips behind a wall. Ships with an original inverted-hull outline effect (Built-in RP and URP) and a demo scene.",
   "unity": "2021.3",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 - 20.07.2026
+
+### Added
+
+- asmdef in Sample
+
 ## 1.0.1 - 19.07.2026
 
 ### Changed
